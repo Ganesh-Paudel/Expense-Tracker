@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.core.config import settings 
+from app.db.session import engine
 
 app = FastAPI(title=settings.app_name)
 
@@ -10,4 +11,11 @@ def health_check():
          "env": settings.env
             
             }
+
+@app.get("/db-check")
+def db_check():
+    with engine.connect() as conn:
+        return {
+            "db" : "connected"
+        }
 
